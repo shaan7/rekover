@@ -15,7 +15,12 @@ CONFIG   -= app_bundle
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    textmessagecommandsource.cpp \
+    getgeolocationcommand.cpp \
+    commandprocessor.cpp \
+    abstractcommandsource.cpp \
+    abstractcommand.cpp
 
 OTHER_FILES += \
     rekoverd.conf
@@ -26,3 +31,13 @@ INSTALLS += daemonconf
 
 target.path = /opt/rekover/bin
 INSTALLS += target
+
+CONFIG += mobility
+MOBILITY += messaging
+
+HEADERS += \
+    textmessagecommandsource.h \
+    commandprocessor.h \
+    abstractcommandsource.h \
+    abstractcommand.h \
+    getgeolocationcommand.h
