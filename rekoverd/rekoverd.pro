@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     getgeolocationcommand.cpp \
     commandprocessor.cpp \
     abstractcommandsource.cpp \
-    abstractcommand.cpp
+    abstractcommand.cpp \
+    stubcommandsource.cpp
 
 OTHER_FILES += \
     rekoverd.conf
@@ -33,11 +34,12 @@ target.path = /opt/rekover/bin
 INSTALLS += target
 
 CONFIG += mobility
-MOBILITY += messaging
+MOBILITY += messaging location
 
 HEADERS += \
     textmessagecommandsource.h \
     commandprocessor.h \
     abstractcommandsource.h \
     abstractcommand.h \
-    getgeolocationcommand.h
+    getgeolocationcommand.h \
+    stubcommandsource.h

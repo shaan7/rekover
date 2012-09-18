@@ -19,33 +19,20 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "commandprocessor.h"
+#ifndef STUBCOMMANDSOURCE_H
+#define STUBCOMMANDSOURCE_H
 
-#include <QDebug>
+#include "abstractcommandsource.h"
 
-CommandProcessor::CommandProcessor(QObject *parent) :
-    QObject(parent)
+class StubCommandSource : public AbstractCommandSource
 {
-}
+    Q_OBJECT
+public:
+    explicit StubCommandSource(QObject *parent = 0);
 
-void CommandProcessor::connectToCommandSource(AbstractCommandSource *commandSource)
-{
-    m_sources.append(commandSource);
-    connect(commandSource, SIGNAL(newCommand(QString, QString)), SLOT(processCommand(QString, QString)));
-}
+private slots:
+    void sendResponseImpl(const QString &response, const QString &incidentId);
+    void createFakeCommand();
+};
 
-void CommandProcessor::processCommand(const QString &commandLine, const QString &incidentId)
-{
-    QStringList commandList = commandLine.split(" ");
-    if (m_commands.contains(commandList.at(0))) {
-        AbstractCommand *command = m_commands.value(commandList.at(0));
-        command->processCommand(commandList, qobject_cast<AbstractCommandSource*>(sender()), incidentId);
-    }
-}
-
-void CommandProcessor::addCommand(AbstractCommand *command)
-{
-    Q_FOREACH(const QString &commandString, command->supportedCommands()) {
-        m_commands.insert(commandString, command);
-    }
-}
+#endif // STUBCOMMANDSOURCE_H

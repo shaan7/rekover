@@ -19,33 +19,25 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA .        *
  ***************************************************************************/
 
-#include "commandprocessor.h"
+#include "stubcommandsource.h"
+
+#include <QtCore/QTimer>
 
 #include <QDebug>
 
-CommandProcessor::CommandProcessor(QObject *parent) :
-    QObject(parent)
+StubCommandSource::StubCommandSource(QObject *parent) :
+    AbstractCommandSource(parent)
 {
+    QTimer::singleShot(2000, this, SLOT(createFakeCommand()));
 }
 
-void CommandProcessor::connectToCommandSource(AbstractCommandSource *commandSource)
+void StubCommandSource::createFakeCommand()
 {
-    m_sources.append(commandSource);
-    connect(commandSource, SIGNAL(newCommand(QString, QString)), SLOT(processCommand(QString, QString)));
+    qDebug() << "CREATING FAKE COMMAND";
+    emit newCommand("getgeolocation", "0");
 }
 
-void CommandProcessor::processCommand(const QString &commandLine, const QString &incidentId)
+void StubCommandSource::sendResponseImpl(const QString &response, const QString &incidentId)
 {
-    QStringList commandList = commandLine.split(" ");
-    if (m_commands.contains(commandList.at(0))) {
-        AbstractCommand *command = m_commands.value(commandList.at(0));
-        command->processCommand(commandList, qobject_cast<AbstractCommandSource*>(sender()), incidentId);
-    }
-}
-
-void CommandProcessor::addCommand(AbstractCommand *command)
-{
-    Q_FOREACH(const QString &commandString, command->supportedCommands()) {
-        m_commands.insert(commandString, command);
-    }
+    qDebug() << "STUB " << incidentId << " " << response;
 }
